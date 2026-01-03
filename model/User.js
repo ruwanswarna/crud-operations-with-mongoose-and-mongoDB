@@ -1,29 +1,38 @@
 import { model, Schema } from "mongoose";
-/** @type {import('mongoose').Schema<User>}  tell vscode to apply mongoose code suggestions*/  
+/** @type {import('mongoose').Schema<User>}  tell vscode to apply mongoose code suggestions*/
 
 // create an schema
 const userSchema = new Schema(
 	{
-		name: {type:String, required: true},
+		name: { type: String, required: true },
 		username: { type: String, required: true, unique: true },
-		password: {type: String, required: true},
+		password: { type: String, required: true },
 		email: {
 			type: String,
 			lowercase: true,
 			match: [/.+@.+\..+/, "Please enter a valid email address"],
 		},
-	},
+		profile: { 
+			type: Schema.Types.ObjectId,
+			ref: "Profile",
+			unique: true,
+		},
+		products: [
+			{type: Schema.Types.ObjectId, ref: "Product"}
+		]
+	},	
 	{
 		timestamps: true,
 	}
-); 
+);
+
 
 //create model with that schema
 const User = model("User", userSchema); //using that schema create a model
 
 /** @type {import('mongoose').Model<User>} for code suggestions in routers */
 export default User;
-
+ 
 //NOTE
 // // Hash password before saving
 // userSchema.pre("save", async function (next) {
@@ -44,5 +53,3 @@ export default User;
 //   delete obj.password;
 //   return obj;
 // };
-
-

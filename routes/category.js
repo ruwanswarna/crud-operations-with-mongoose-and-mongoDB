@@ -64,4 +64,32 @@ router.put("/:catId", async (req, res) => {
 	}
 });
 
+//delete product from multiple categories
+router.delete("/:catId", async (req, res) =>                             {
+	const catId = req.params.catId;
+	const productId = req.body.productId;
+	if (!productId) {
+		return res.status(400).json({
+			success: false,
+			error: "request body data not found/ bad request",
+			data: null,
+		});
+	}
+	try {
+		await Category.updateMany(
+			{ products: productId },
+			{ $pull: { products: productId } }
+		);
+		await Product.updateOne({ _id: productId }, { $pull: { category: catId } });
+		res.status(200).json({
+			success: true,
+			error: null,
+			data: "product removed",
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("Internal server error");
+	}
+});
+
 export default router;

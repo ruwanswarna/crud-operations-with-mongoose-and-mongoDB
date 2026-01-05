@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
-
+/** @type {import('mongoose').Schema<Product>}  tell vscode to apply mongoose code suggestions*/
+//create an schema
 const productSchema = new Schema(
 	{
 		name: { type: String, required: true },
@@ -12,4 +13,5 @@ const productSchema = new Schema(
 );
 
 const Product = model("Product", productSchema);
+/** @type {import('mongoose').Model<Product>} for code suggestions in routers */
 export default Product;

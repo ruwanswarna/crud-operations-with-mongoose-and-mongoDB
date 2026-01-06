@@ -12,27 +12,25 @@ const userSchema = new Schema(
 			lowercase: true,
 			match: [/.+@.+\..+/, "Please enter a valid email address"],
 		},
-		profile: { 
+		profile: {
 			type: Schema.Types.ObjectId,
 			ref: "Profile",
 			unique: true,
+			sparse: true,
 		},
-		products: [
-			{type: Schema.Types.ObjectId, ref: "Product"}
-		]
-	},	
+		products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+	},
 	{
 		timestamps: true,
 	}
 );
-
 
 //create model with that schema
 const User = model("User", userSchema); //using that schema create a model
 
 /** @type {import('mongoose').Model<User>} for code suggestions in routers */
 export default User;
- 
+
 //NOTE
 // // Hash password before saving
 // userSchema.pre("save", async function (next) {

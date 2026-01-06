@@ -48,20 +48,24 @@ router.post("/", async (req, res) => {
 	for (const user of users) {
 		try {
 			const newUser = await User.create(user);
-
+			console.log(`User created: ${newUser}`);
 			const index = users.indexOf(user);
 			const newProfile = await Profile.create({
-				image: profileImage[index],
+				image: profileImage[index].image,
 				user: newUser._id,
 			});
-
-			await User.updateOne({ _id: newUser._id }, { profile: newProfile._id });
+			console.log(`Profile created: ${newProfile}`);
+			const result = await User.updateOne(
+				{ _id: newUser._id },
+				{ profile: newProfile._id }
+			);
+			console.log(result);
 		} catch (error) {
 			console.log(error);
-            return res.status(500).json({error: "database seeding failed"})
+			return res.status(500).json({ error: "database seeding failed" });
 		}
-        res.status(201).json({msg: "database successfully seeded."})
 	}
+	res.status(201).json({ msg: "database successfully seeded." });
 });
 
 export default router;

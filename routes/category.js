@@ -65,7 +65,7 @@ router.put("/:catId", async (req, res) => {
 });
 
 //delete product from multiple categories
-router.delete("/:catId", async (req, res) =>                             {
+router.delete("/:catId", async (req, res) => {
 	const catId = req.params.catId;
 	const productId = req.body.productId;
 	if (!productId) {

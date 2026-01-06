@@ -8,7 +8,7 @@ const profileSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "User",
             required: true,
-            unique: true
+            unique: true 
         }
 	},
 	{ timestamps: true }

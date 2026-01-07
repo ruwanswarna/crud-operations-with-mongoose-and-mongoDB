@@ -97,7 +97,29 @@ router.post("/_profile/:userId", async (req, res) => {
 	}
 });
 
-//delete user by id
+//delete profile by profile id (pre function)
+router.delete("profile/:profileId", async (req, res) => {
+	const profileId = req.params.profileId;
+	try {
+		// await User.updateOne({ profile: profileId }, { profile: null }); //deligated to prefunction
+
+		await Profile.deleteOne({ _id: profileId });
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("Internal server error");
+	}
+});
+
+//delete user by user id
+router.delete("/:userId", async (req, res) => {
+	const userId = req.params.userId;
+	try {
+		await User.deleteOne({ _id: userId });
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("Internal server error");
+	}
+});
 
 //get profile by user id
 router.get("/profile/:userId", async (req, res) => {

@@ -1,4 +1,7 @@
 import { model, Schema } from "mongoose";
+import Profile from "./profile.js";
+import Product from "./product.js";
+import Category from "./category.js";
 /** @type {import('mongoose').Schema<User>}  tell vscode to apply mongoose code suggestions*/
 
 // create an schema
@@ -24,6 +27,26 @@ const userSchema = new Schema(
 		timestamps: true,
 	}
 );
+
+//prefunction for user delete and all relations profile, product, categories
+userSchema.pre("deleteOne", async function (next) {
+	const user = await this.model.findOne(this.getQuery());
+	if (user) {
+		await Profile.deleteOne({ user: user._id });
+
+		const products = user.products;
+		products.forEach(async (product) => {
+			await Category.updateMany(
+				{ product: product },
+				{ $pull: { product: product } }
+			);
+			//await Product.deleteOne({_id: product});
+		});
+
+		await Product.deleteMany({ user: user._id });
+	}
+	next();
+});
 
 //create model with that schema
 const User = model("User", userSchema); //using that schema create a model
